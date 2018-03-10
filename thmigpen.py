@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # thmigpen
-# v0.0 for Python 3.5
+# v0.1 for Python 3.5
 
 # Basis of the recurring repeat modified from: https://stackoverflow.com/questions/2295765/generating-recurring-dates-using-python
 
@@ -49,6 +49,6 @@ if pnut_message != '':
 	posttext += "\n\n" + channelurlmd
 	postcontent = pnutpy.api.create_post(data={'text': posttext})
 	
-	# Create message in channel 962, using ONLY the text from pnut_message:
+	# Create message in channel 779, using ONLY the text from pnut_message:
 	channelid = 779
 	postcontent = pnutpy.api.create_message(channelid, data={'text': pnut_message})

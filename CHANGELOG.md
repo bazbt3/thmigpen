@@ -1,6 +1,9 @@
 ## Changelog
 (most recent first)
 
+### v0.1 2018-03-11:
+* **`thmigpoll` only**: Added vote totals.
+
 ### v0.1 2018-03-10:
 * Added ancillary, very alpha, **`thmigpoll.py`** - a rudimentary script to list respondents to a poll; entirely dependent on an RSS feed of a pnut.io hashtag.  
 * Edited `thmigpen` pnut channel code comments.

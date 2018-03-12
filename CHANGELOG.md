@@ -1,6 +1,12 @@
 ## Changelog
 (most recent first)
 
+### v0.1 2018-03-12:
+* **`thmigpoll` only**: Tidied up poll summary output.
+
+### v0.1 2018-03-12:
+* **`thmigpoll` only**: Trapped posts without a hash attached to the tag.
+
 ### v0.1 2018-03-11:
 * **`thmigpoll` only**: Added vote totals.
 

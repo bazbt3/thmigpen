@@ -5,4 +5,4 @@ Though probably inelegant, intended initially to be called by a cron job and run
 
 ### Scripts:
 * **thmigpen** - the main script (see above.)
-* **thmigpoll** - a very alpha rudimentary poll vote collector which checks a specific hashtag's RSS feed.  The script for e.g. `#tmpoll201803` will look for, e.g.: **`#tmpoll201803`**`#pythonmonday`, will extract **`#pythonmonday`** and add it to the total of votes.  Intended to be called by a cron job and run at frequent intervals over a small range of dates each month.
+* **thmigpoll** - a very alpha rudimentary poll vote collector which checks a specific hashtag's RSS feed.  The script for the RSS feed for e.g. **`#tmpoll201803`** will examine a prefefined list of candidates, reject non-matching text and add matches to the total of votes.  Intended to be called by a cron job and run at frequent intervals over a small range of dates each month.

@@ -1,6 +1,9 @@
 ## Changelog
 (most recent first)
 
+### v0.1 2018-03-13:
+* **`thmigpoll` only**: Added notification if no-one voted.
+
 ### v0.1 2018-03-12:
 * **`thmigpoll` only**: Tidied up poll summary output.
 

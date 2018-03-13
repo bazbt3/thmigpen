@@ -2,7 +2,7 @@
 
 # thmigpoll
 # A very alpha attempt to list respondents to a pnut.io poll, using an RSS feed of the poll's hashtag
-# v0.1.thmigpoll.2 for Python 3.5
+# v0.1.thmigpoll.4 for Python 3.5
 
 # Based on rssupdatepnut and thmigpen.
 
@@ -58,20 +58,25 @@ for post in d:
 					hashtag = word
 					votes.append(hashtag)
 					if not (hashtag in polloptions):
-						hashtag += ', however it\'s not a candidate. Please try again'
+						hashtag += ', but it\'s not a candidate. Please try again'
 		n += 1
-		posttext += '• @' + user + ' voted for ' + hashtag + ' in #' + tag + '.\n'
+		if votesmade:
+			posttext += '• @' + user + ' voted for ' + hashtag + ' in #' + tag + '.\n'
 	except IndexError:
 		pass
 
+if not votesmade:
+	posttext += 'No-one voted yet. :(\n'
+
 # Total votes:
-posttext += '\nLeaderboard:\n'
+posttext += '\nVotes for each option:\n'
 for vote in votes:
 	if vote in polloptions:
 		polloptions[vote] += 1
 for vote in polloptions:
 	posttext += str(polloptions[vote]) + ' ' + vote + '\n'	
 
+# TESTING:
 # Uncomment both lines to prevent posts & messages whilst testing:
 # print(posttext)
 # posttext = ''
@@ -83,7 +88,7 @@ if posttext:
 	messagecontent = pnutpy.api.create_message(channelid, data={'text': posttext})
 	
 	# Create a public post:
-	pollalert = 'The current state of the votes in the TEST ' + tag + ' poll.'
+	pollalert = 'The current state of the votes in the TEST ' + tag + ' poll. (Not run automatically.)'
 	channelurl = "https://patter.chat/room/" + channelid
 	# Removed hash before tag:
 	channelurlmd = '[' + tag + ' <=>](' + channelurl + ")"

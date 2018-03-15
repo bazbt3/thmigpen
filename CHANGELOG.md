@@ -1,6 +1,9 @@
 ## Changelog
 (most recent first)
 
+### v0.1 2018-03-15:
+* **`thmigpoll` only**: Added post numbers to votes as a precursor to reply confirmation of votes. Tidied messages, re-ordered some code.
+
 ### v0.1 2018-03-13:
 * **`thmigpoll` only**: Added notification if no-one voted.
 

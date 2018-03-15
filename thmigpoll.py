@@ -2,17 +2,17 @@
 
 # thmigpoll
 # A very alpha attempt to list respondents to a pnut.io poll, using an RSS feed of the poll's hashtag
-# v0.1.thmigpoll.4 for Python 3.5
+# v0.1.thmigpoll.7 for Python 3.5
 
 # Based on rssupdatepnut and thmigpen.
 
-# Setup tag and channel parameters, a list of valid poll options, amd an empty list for votes: 
-tag = 'tmpoll'
+# Setup tag and channel parameters, a list of valid poll options, and an empty list for votes: 
+tag = 'tm201804'
 channelid = '962'
 polloptions = {
-	'#test': 0,
-	'#test1': 0,
-	'#test2': 0
+	'#ketchup': 0,
+	'#mustard': 0,
+	'#ketchupnmustard': 0
 	}
 votes = []
 
@@ -28,10 +28,15 @@ token = tokenfile.read()
 token = token.strip()
 pnutpy.api.add_authorization_token(token)
 
-posttext = 'The choices in #' +  tag + ' are:'
+# Open vote post numbers file:
+y = open('pollpostnumbers.txt', 'r')
+y = y.readlines()
+
+# List the poll options:
+posttext = 'The choices in #' +  tag + ' are:\n'
 for option in polloptions:
-	posttext += '\n' + option
-posttext += '\n\n'
+	posttext += '• ' + option + '\n'
+posttext += '\n'
 
 # Get hashtag RSS feed from pnut.io:
 feed_title = 'https://api.pnut.io/v0/feed/rss/posts/tags/' + tag
@@ -40,10 +45,13 @@ d = feedparser.parse(feed_title)
 # Extract posts, strip out unnecessary words, check for matches to poll options, and construct a summary message:
 n = 0
 votesmade = False
-posttext += 'The votes so far:\n'
+# Save the list to file:
+f=open('pollpostnumbers.txt','w')
+posttext += 'The votes so far:\n\n'
 for post in d:
 	try:
 		p_title = d.entries[n].title
+		# Extract words from post:
 		words = p_title.split()
 		for word in words:
 			if ('@' in word):
@@ -59,36 +67,45 @@ for post in d:
 					votes.append(hashtag)
 					if not (hashtag in polloptions):
 						hashtag += ', but it\'s not a candidate. Please try again'
-		n += 1
 		if votesmade:
-			posttext += '• @' + user + ' voted for ' + hashtag + ' in #' + tag + '.\n'
+			# Extract post number from link:
+			p_link = d.entries[n].link
+			postnum = p_link.strip('https://posts.pnut.io/')
+			postnum = postnum.split('#')[0]
+			# Save the post number to a file:
+			if not (postnum in y):
+				f.write(str(postnum) + '\n')
+			# Create a poll entry:
+			posttext += '@' + user + ' voted for ' + hashtag + '. (Post ' + str(postnum) + '.)\n\n'
+		n += 1
 	except IndexError:
 		pass
+f.close()
 
+# Tidy the message if no-one voted yet:
 if not votesmade:
-	posttext += 'No-one voted yet. :(\n'
+	posttext += '• No-one voted yet. Why not be first?!\n'
 
 # Total votes:
-posttext += '\nVotes for each option:\n'
-for vote in votes:
-	if vote in polloptions:
-		polloptions[vote] += 1
-for vote in polloptions:
-	posttext += str(polloptions[vote]) + ' ' + vote + '\n'	
+if votesmade:
+	posttext += 'Total votes for each option:\n'
+	for vote in votes:
+		if vote in polloptions:
+			polloptions[vote] += 1
+	for vote in polloptions:
+		posttext += '• ' + str(polloptions[vote]) + ' ' + vote + '\n'	
 
-# TESTING:
-# Uncomment both lines to prevent posts & messages whilst testing:
+# FOR TESTING, uncomment the lines in this section to prevent the creation of posts & messages:
 # print(posttext)
 # posttext = ''
 
 # If there's text to post:
 if posttext:
-	
 	# Create message in channel 962, using ONLY the text from pnut_message:
 	messagecontent = pnutpy.api.create_message(channelid, data={'text': posttext})
 	
 	# Create a public post:
-	pollalert = 'The current state of the votes in the TEST ' + tag + ' poll. (Not run automatically.)'
+	pollalert = 'The current state of the votes in the TEST #' + tag + ' poll. (Not run automatically.)'
 	channelurl = "https://patter.chat/room/" + channelid
 	# Removed hash before tag:
 	channelurlmd = '[' + tag + ' <=>](' + channelurl + ")"

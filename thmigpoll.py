@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 
-# thmigpoll
-# A very alpha attempt to list respondents to a pnut.io poll, using an RSS feed of the poll's hashtag
-# v0.1.thmigpoll.7 for Python 3.5
+# thmigpoll v0.1.11 for Python 3.5
 
+# A quite alpha attempt to list respondents to a pnut.io poll, using the poll's hashtag.
 # Based on rssupdatepnut and thmigpen.
 
 # Setup tag and channel parameters, a list of valid poll options, and an empty list for votes: 
-tag = 'tm201804'
+tag = 'tmpoll'
+retrievecount = 50
 channelid = '962'
 polloptions = {
-	'#ketchup': 0,
-	'#mustard': 0,
-	'#ketchupnmustard': 0
+	'#test': 0,
+	'#test1': 0,
+	'#test2': 0
 	}
 votes = []
 
@@ -21,6 +21,9 @@ import feedparser
 
 # Import @33MHz and @thrrgilag's library for interacting with pnut.io:
 import pnutpy
+
+# Import module to work out the maximum votes within the dict:
+import operator
 
 # Setup pnut.io authorisation:
 tokenfile = open("pnut_app_token.txt", "r")
@@ -38,62 +41,61 @@ for option in polloptions:
 	posttext += '• ' + option + '\n'
 posttext += '\n'
 
-# Get hashtag RSS feed from pnut.io:
-feed_title = 'https://api.pnut.io/v0/feed/rss/posts/tags/' + tag
-d = feedparser.parse(feed_title)
+# Get hashtags from pnut.io:
+d = pnutpy.api.posts_with_hashtag(tag, count = retrievecount)
 
 # Extract posts, strip out unnecessary words, check for matches to poll options, and construct a summary message:
-n = 0
 votesmade = False
-# Save the list to file:
+# Open the previous post numbers file:
 f=open('pollpostnumbers.txt','w')
-posttext += 'The votes so far:\n\n'
-for post in d:
+posttext += 'The votes so far:\n'
+number = retrievecount
+while number >= 0:
 	try:
-		p_title = d.entries[n].title
-		# Extract words from post:
-		words = p_title.split()
-		for word in words:
-			if ('@' in word):
-				word = word.strip('@')
-				word = word.strip(':')
-				user = word
-				votesmade = True
-			if not ('#' in word):
-				hashtag = 'nothing (no hashtag included, oops!) Please try again'
-			if ('#' in word):
-				if word != ('#' + tag):
-					hashtag = word
-					votes.append(hashtag)
-					if not (hashtag in polloptions):
-						hashtag += ', but it\'s not a candidate. Please try again'
+		if not "is_deleted" in d[0][number]:
+			user = str(d[0][number]["user"]["username"])
+			p_title = d[0][number]["content"]["text"]
+			postnum = str(d[0][number]["id"])
+			words = p_title.split()
+			for word in words:
+				if not ('#' in word):
+					hashtag = 'nothing (no hashtag included, oops!) Please try again.'
+				if ('#' in word):
+					if word != ('#' + tag):
+						votesmade = True
+						hashtag = word
+						votes.append(hashtag)
+						if not (hashtag in polloptions): 
+							hashtag += ', which is not a candidate. Please try again.'
 		if votesmade:
-			# Extract post number from link:
-			p_link = d.entries[n].link
-			postnum = p_link.strip('https://posts.pnut.io/')
-			postnum = postnum.split('#')[0]
 			# Save the post number to a file:
 			if not (postnum in y):
 				f.write(str(postnum) + '\n')
 			# Create a poll entry:
-			posttext += '@' + user + ' voted for ' + hashtag + '. (Post ' + str(postnum) + '.)\n\n'
-		n += 1
+			posttext += '• @' + user + ' voted for ' + hashtag + '\n'
 	except IndexError:
 		pass
+	number -= 1
 f.close()
 
 # Tidy the message if no-one voted yet:
 if not votesmade:
-	posttext += '• No-one voted yet. Why not be first?!\n'
+	posttext += '• No-one has voted yet. Why not be first?! Simply create a public post using #' + tag + ' and your choice, not forgetting the hash.\n'
 
 # Total votes:
 if votesmade:
-	posttext += 'Total votes for each option:\n'
+	posttext += '\nTotal votes for each option:\n'
 	for vote in votes:
 		if vote in polloptions:
 			polloptions[vote] += 1
 	for vote in polloptions:
 		posttext += '• ' + str(polloptions[vote]) + ' ' + vote + '\n'	
+
+# Summarise the intermediate result:
+if votesmade:
+	winner = (max(polloptions.items(), key=operator.itemgetter(1))[0])
+	winnervotes = (max(polloptions.items(), key=operator.itemgetter(1))[1])
+	posttext += '\nIf the poll was closed now, ' + winner + ' would win with ' + str(winnervotes) + ' votes!'
 
 # FOR TESTING, uncomment the lines in this section to prevent the creation of posts & messages:
 # print(posttext)
@@ -105,7 +107,7 @@ if posttext:
 	messagecontent = pnutpy.api.create_message(channelid, data={'text': posttext})
 	
 	# Create a public post:
-	pollalert = 'The current state of the votes in the TEST #' + tag + ' poll. (Not run automatically.)'
+	pollalert = 'To see the current votes in the TEST #' + tag + ' poll go to the Patter room link below. (Report not run automatically.)'
 	channelurl = "https://patter.chat/room/" + channelid
 	# Removed hash before tag:
 	channelurlmd = '[' + tag + ' <=>](' + channelurl + ")"

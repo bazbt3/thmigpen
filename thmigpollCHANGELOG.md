@@ -1,6 +1,10 @@
 ## Changelog
 (most recent first)
 
+### v0.1.12 2018-03-18:
+* Skipped processing of notifications by checking if `<=>` exists within a post.
+* Removed now-obsoleted `import feedparser`.
+
 ### v0.1.11 2018-03-18:
 * Replaced previous limiting reliance on RSS feed; now uses PNUTpy's `pnutpy.api.posts_with_hashtag` to return more than 9 results (currently set to an arbitrary maximum of 50.)
 * Tidied messages text again.

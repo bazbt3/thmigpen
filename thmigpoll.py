@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# thmigpoll v0.1.11 for Python 3.5
+# thmigpoll v0.1.12 for Python 3.5
 
 # A quite alpha attempt to list respondents to a pnut.io poll, using the poll's hashtag.
 # Based on rssupdatepnut and thmigpen.
@@ -15,9 +15,6 @@ polloptions = {
 	'#test2': 0
 	}
 votes = []
-
-# Import RSS feed parser:
-import feedparser
 
 # Import @33MHz and @thrrgilag's library for interacting with pnut.io:
 import pnutpy
@@ -41,7 +38,7 @@ for option in polloptions:
 	posttext += '• ' + option + '\n'
 posttext += '\n'
 
-# Get hashtags from pnut.io:
+# Get hashtag content from pnut.io:
 d = pnutpy.api.posts_with_hashtag(tag, count = retrievecount)
 
 # Extract posts, strip out unnecessary words, check for matches to poll options, and construct a summary message:
@@ -50,6 +47,7 @@ votesmade = False
 f=open('pollpostnumbers.txt','w')
 posttext += 'The votes so far:\n'
 number = retrievecount
+hashtag = ''
 while number >= 0:
 	try:
 		if not "is_deleted" in d[0][number]:
@@ -57,16 +55,18 @@ while number >= 0:
 			p_title = d[0][number]["content"]["text"]
 			postnum = str(d[0][number]["id"])
 			words = p_title.split()
-			for word in words:
-				if not ('#' in word):
-					hashtag = 'nothing (no hashtag included, oops!) Please try again.'
-				if ('#' in word):
-					if word != ('#' + tag):
-						votesmade = True
-						hashtag = word
-						votes.append(hashtag)
-						if not (hashtag in polloptions): 
-							hashtag += ', which is not a candidate. Please try again.'
+			# If '<=>' does not appears in a post it's not a notification, so process it:
+			if not ('<=>' in p_title):
+				for word in words:
+					if not ('#' in word):
+						hashtag = 'nothing (no hashtag included, oops!) Please try again.'
+					if ('#' in word):
+						if word != ('#' + tag):
+							votesmade = True
+							hashtag = word
+							votes.append(hashtag)
+							if not (hashtag in polloptions): 
+								hashtag += ', which is not a candidate. Please try again.'
 		if votesmade:
 			# Save the post number to a file:
 			if not (postnum in y):

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-# thmigpoll v0.1.12 for Python 3.5
+# thmigpoll v0.1.16 for Python 3.5
 
-# A quite alpha attempt to list respondents to a pnut.io poll, using the poll's hashtag.
+# A very beta attempt to list respondents to a pnut.io poll, using the poll's hashtag.
 # Based on rssupdatepnut and thmigpen.
 
 # Setup tag and channel parameters, a list of valid poll options, and an empty list for votes: 
@@ -22,6 +22,9 @@ import pnutpy
 # Import module to work out the maximum votes within the dict:
 import operator
 
+# Import time, used to delay posting to avoid rate limits:
+import time
+
 # Setup pnut.io authorisation:
 tokenfile = open("pnut_app_token.txt", "r")
 token = tokenfile.read()
@@ -29,8 +32,9 @@ token = token.strip()
 pnutpy.api.add_authorization_token(token)
 
 # Open vote post numbers file:
-y = open('pollpostnumbers.txt', 'r')
-y = y.readlines()
+f = open('pollpostnumbers.txt', 'r')
+y = f.readlines()
+f.close()
 
 # List the poll options:
 posttext = 'The choices in #' +  tag + ' are:\n'
@@ -49,30 +53,51 @@ posttext += 'The votes so far:\n'
 number = retrievecount
 hashtag = ''
 while number >= 0:
+	newvote = False
 	try:
+		validvote = False
 		if not "is_deleted" in d[0][number]:
 			user = str(d[0][number]["user"]["username"])
-			p_title = d[0][number]["content"]["text"]
+			votepost = d[0][number]["content"]["text"]
 			postnum = str(d[0][number]["id"])
-			words = p_title.split()
+			words = votepost.split()
 			# If '<=>' does not appears in a post it's not a notification, so process it:
-			if not ('<=>' in p_title):
+			if not ('<=>' in votepost):
 				for word in words:
-					if not ('#' in word):
-						hashtag = 'nothing (no hashtag included, oops!) Please try again.'
 					if ('#' in word):
 						if word != ('#' + tag):
 							votesmade = True
 							hashtag = word
-							votes.append(hashtag)
-							if not (hashtag in polloptions): 
-								hashtag += ', which is not a candidate. Please try again.'
-		if votesmade:
+							if (hashtag in polloptions):
+								validvote = True
+								votes.append(hashtag)
+							if not (hashtag in polloptions):
+								validvote = False
+		if votesmade and (not ('<=>' in votepost)):
 			# Save the post number to a file:
-			if not (postnum in y):
+			if not postnum in y:
 				f.write(str(postnum) + '\n')
-			# Create a poll entry:
-			posttext += '• @' + user + ' voted for ' + hashtag + '\n'
+				# Reply if the vote is valid:
+				if validvote and (not (postnum + '\n') in y):
+					newvote = True
+					thankstext = '@' + user + ' Thanks for your vote! (' + postnum + ')\n'
+					
+					channelurl = "https://patter.chat/room/" + channelid
+					channelurlmd = '[See here for the current poll. <=>](' + channelurl + ')'
+					thankstext += channelurlmd
+					pnutpy.api.create_post(data={'reply_to': postnum, 'text': thankstext})
+					# Delay to avoid rate limits:
+					time.sleep(3.2)
+				
+				if (not validvote) and (not (postnum + '\n') in y):
+					thankstext = '@' + user + ' Sorry, your vote seems to be invalid. Can you please try again? (' + postnum + ')'
+					pnutpy.api.create_post(data={'reply_to': postnum, 'text': thankstext})
+					# Delay to avoid rate limits:
+					time.sleep(3.2)
+
+			# Create a poll entry if the vote is valid:
+			if validvote:
+				posttext += '• @' + user + ' voted for ' + hashtag + '\n'			
 	except IndexError:
 		pass
 	number -= 1
@@ -95,19 +120,19 @@ if votesmade:
 if votesmade:
 	winner = (max(polloptions.items(), key=operator.itemgetter(1))[0])
 	winnervotes = (max(polloptions.items(), key=operator.itemgetter(1))[1])
-	posttext += '\nIf the poll was closed now, ' + winner + ' would win with ' + str(winnervotes) + ' votes!'
+	posttext += '\nIf the poll was closed now, ' + winner + ' would win with ' + str(winnervotes) + ' votes!)'
 
 # FOR TESTING, uncomment the lines in this section to prevent the creation of posts & messages:
 # print(posttext)
 # posttext = ''
 
 # If there's text to post:
-if posttext:
-	# Create message in channel 962, using ONLY the text from pnut_message:
+if newvote:
+	# Create message in the chosen channel, using ONLY the text from pnut_message:
 	messagecontent = pnutpy.api.create_message(channelid, data={'text': posttext})
 	
 	# Create a public post:
-	pollalert = 'To see the current votes in the TEST #' + tag + ' poll go to the Patter room link below. (Report not run automatically.)'
+	pollalert = 'To see the current votes in the TEST #' + tag + ' poll go to the Patter room link below. (' + postnum + ')'
 	channelurl = "https://patter.chat/room/" + channelid
 	# Removed hash before tag:
 	channelurlmd = '[' + tag + ' <=>](' + channelurl + ")"

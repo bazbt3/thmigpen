@@ -1,6 +1,11 @@
 ## Changelog
 (most recent first)
 
+### v0.1.16 2018-03-24:
+* Added check for previous votes.
+* Added a reply for each new vote; thanks for valid, retry for invalid.
+* Tidied code.
+
 ### v0.1.12 2018-03-18:
 * Skipped processing of notifications by checking if `<=>` exists within a post.
 * Removed now-obsoleted `import feedparser`.

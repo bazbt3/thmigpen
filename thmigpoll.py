@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# thmigpoll v0.1.19 for Python 3.5
+# thmigpoll v0.1.20 for Python 3.5
 
 # A very beta attempt to list respondents to a pnut.io poll, using the poll's hashtag.
 # Based on rssupdatepnut and thmigpen.
@@ -124,7 +124,11 @@ if votesmade:
 if votesmade:
 	winner = (max(polloptions.items(), key=operator.itemgetter(1))[0])
 	winnervotes = (max(polloptions.items(), key=operator.itemgetter(1))[1])
-	posttext += '\nIf the poll was closed now, ' + winner + ' would win with ' + str(winnervotes) + ' votes!)'
+	# Adjust output if more than one vote: 
+	addans = ''
+	if winnervotes > 1:
+		addans = 's'
+	posttext += '\nIf the poll was closed now, ' + winner + ' would win with ' + str(winnervotes) + ' vote' + addans + '!'
 
 # FOR TESTING, uncomment the lines in this section to prevent the creation of posts & messages:
 # print(posttext)

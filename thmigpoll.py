@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 
-# thmigpoll v0.1.16 for Python 3.5
+# thmigpoll v0.1.18 for Python 3.5
 
 # A very beta attempt to list respondents to a pnut.io poll, using the poll's hashtag.
 # Based on rssupdatepnut and thmigpen.
 
 # Setup tag and channel parameters, a list of valid poll options, and an empty list for votes: 
-tag = 'tmpoll'
+tag = 'dst2018'
+# description is displayed in braces:
+tagdescribe = 'Have you changed clocks to summer time yet?'
 retrievecount = 50
 channelid = '962'
 polloptions = {
-	'#test': 0,
-	'#test1': 0,
-	'#test2': 0
+	'#no': 0,
+	'#yes': 0,
+	'#noneedto': 0,
+	'#2weeksago': 0,
+	'#notagain': 0
 	}
 votes = []
 
@@ -37,7 +41,7 @@ y = f.readlines()
 f.close()
 
 # List the poll options:
-posttext = 'The choices in #' +  tag + ' are:\n'
+posttext = 'The choices in #' +  tag + ' (' + tagdescribe + ') are:\n'
 for option in polloptions:
 	posttext += '• ' + option + '\n'
 posttext += '\n'
@@ -124,7 +128,7 @@ if votesmade:
 
 # FOR TESTING, uncomment the lines in this section to prevent the creation of posts & messages:
 # print(posttext)
-# posttext = ''
+# newvote = False
 
 # If there's text to post:
 if newvote:

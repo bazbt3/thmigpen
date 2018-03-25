@@ -1,6 +1,10 @@
 ## Changelog
 (most recent first)
 
+### v0.1.18 2018-03-25:
+* Added a descriptive sentence.
+* Changed the test for creation of messages *only during testing*.
+
 ### v0.1.16 2018-03-24:
 * Added check for previous votes.
 * Added a reply for each new vote; thanks for valid, retry for invalid.

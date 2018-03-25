@@ -140,7 +140,7 @@ if newvote:
 	messagecontent = pnutpy.api.create_message(channelid, data={'text': posttext})
 	
 	# Create a public post:
-	pollalert = 'To see the current votes in the TEST #' + tag + '(' + tagdescribe + ') poll go to the Patter room link below. (' + postnum + ')'
+	pollalert = 'To see the poll for #' + tag + ' (' + tagdescribe + ') go to the Patter room link below. To vote, make a post here, not the channel.\n(' + postnum + ')'
 	channelurl = "https://patter.chat/room/" + channelid
 	# Removed hash before tag:
 	channelurlmd = '[' + tag + ' <=>](' + channelurl + ")"

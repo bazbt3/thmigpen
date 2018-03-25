@@ -2,6 +2,9 @@
 (most recent first)
 
 ### v0.1.20 2018-03-25:
+* Tidied post text.
+
+### v0.1.20 2018-03-25:
 * Added rest for more than one vote, to remove '1 votes' bug.
 
 ### v0.1.19 2018-03-25:

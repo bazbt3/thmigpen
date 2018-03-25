@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# thmigpoll v0.1.18 for Python 3.5
+# thmigpoll v0.1.19 for Python 3.5
 
 # A very beta attempt to list respondents to a pnut.io poll, using the poll's hashtag.
 # Based on rssupdatepnut and thmigpen.
@@ -136,7 +136,7 @@ if newvote:
 	messagecontent = pnutpy.api.create_message(channelid, data={'text': posttext})
 	
 	# Create a public post:
-	pollalert = 'To see the current votes in the TEST #' + tag + ' poll go to the Patter room link below. (' + postnum + ')'
+	pollalert = 'To see the current votes in the TEST #' + tag + '(' + tagdescribe + ') poll go to the Patter room link below. (' + postnum + ')'
 	channelurl = "https://patter.chat/room/" + channelid
 	# Removed hash before tag:
 	channelurlmd = '[' + tag + ' <=>](' + channelurl + ")"

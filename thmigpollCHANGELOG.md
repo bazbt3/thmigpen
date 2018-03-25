@@ -1,6 +1,9 @@
 ## Changelog
 (most recent first)
 
+### v0.1.19 2018-03-25:
+* Also added descriptive sentence to post.
+
 ### v0.1.18 2018-03-25:
 * Added a descriptive sentence.
 * Changed the test for creation of messages *only during testing*.

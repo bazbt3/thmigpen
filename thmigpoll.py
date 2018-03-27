@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# thmigpoll v0.1.20 for Python 3.5
+# thmigpoll v0.1.21 for Python 3.5
 
 # A very beta attempt to list respondents to a pnut.io poll, using the poll's hashtag.
 # Based on rssupdatepnut and thmigpen.

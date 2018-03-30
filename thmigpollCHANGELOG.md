@@ -1,6 +1,9 @@
 ## Changelog
 (most recent first)
 
+### v0.1.22 2018-03-30:
+* Rejected ThemeMonday hashtag.
+
 ### v0.1.21 2018-03-25:
 * Tidied post text.
 

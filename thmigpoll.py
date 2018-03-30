@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# thmigpoll v0.1.21 for Python 3.5
+# thmigpoll v0.1.22 for Python 3.5
 
 # A very beta attempt to list respondents to a pnut.io poll, using the poll's hashtag.
 # Based on rssupdatepnut and thmigpen.
@@ -69,7 +69,7 @@ while number >= 0:
 			if not ('<=>' in votepost):
 				for word in words:
 					if ('#' in word):
-						if word != ('#' + tag):
+						if word != ('#' + tag) or word != '#ThemeMonday':
 							votesmade = True
 							hashtag = word
 							if (hashtag in polloptions):

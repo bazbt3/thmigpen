@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# thmigask v0.1.4 for Python 3.5
+# thmigask v0.1.5 for Python 3.5
 
 # A very beta attempt to list suggestions for a pnut.io poll.
 # Based on thmigpoll.
@@ -54,7 +54,7 @@ while number >= 0:
 			if not ('<=>' in suggestionpost):
 				for word in words:
 					if ('#' in word):
-						if word != ('#' + tag):
+						if word != ('#' + tag)or word != '#ThemeMonday':
 							suggestionsmade = True
 							validsuggestion = True
 							hashtag = word

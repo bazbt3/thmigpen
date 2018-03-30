@@ -1,6 +1,9 @@
 ## Changelog
 (most recent first)
 
+### v0.1.5 2018-03-30:
+* Rejected ThemeMonday hashtag.
+
 ### v0.1.4 2018-03-30:
 * Complete rewrite using thmigpoll codebase. (Intermediate versions not committed.)
 * Bug: Cannot run automatically, notifications currently repeat each time.

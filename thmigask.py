@@ -5,11 +5,11 @@
 # A very beta attempt to list suggestions for a pnut.io poll.
 # Based on thmigpoll.
 
-# Setup tag and channel parameters, a list of valid poll options, and an empty list for votes: 
+# Setup tag and channel parameters, and an empty list for suggestions: 
 tag = 'tmask1804'
 # description is displayed in braces:
-tagdescribe = 'Suggest a theme for April 9.'
-roomname = 'ThemeMonday'
+tagdescribe = 'Suggest a theme for April 9'
+roomname = '#ThemeMonday'
 retrievecount = 50
 channelid = '779'
 suggestions = []
@@ -105,7 +105,7 @@ if newsuggestion:
 	messagecontent = pnutpy.api.create_message(channelid, data={'text': posttext})
 	
 	# Create a public post:
-	suggestionalert = 'To see suggestions for #' + tag + ' (' + tagdescribe + ') see the chatroom link below. Post suggestions here, not the channel.\n'
+	suggestionalert = 'To see suggestions for #' + tag + ' (' + tagdescribe + ') see the chatroom link below. Please suggest in public, not the channel.\n'
 	channelurl = "https://patter.chat/room/" + channelid
 	# Removed hash before tag:
 	channelurlmd = '[' + roomname + ' <=>](' + channelurl + ")"

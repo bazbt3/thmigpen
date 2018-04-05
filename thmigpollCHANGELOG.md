@@ -1,6 +1,9 @@
 ## Changelog
 (most recent first)
 
+### v0.1.23 2018-04-05:
+* Moved rejection of poll subject hashtag from within the code to the setup section.
+
 ### v0.1.22 2018-03-30:
 * Rejected ThemeMonday hashtag.
 

@@ -5,18 +5,18 @@
 # A very beta attempt to list respondents to a pnut.io poll, using the poll's hashtag.
 # Based on rssupdatepnut and thmigpen.
 
-# Setup tag and channel parameters, a list of valid poll options, and an empty list for votes: 
-tag = 'dst2018'
+# Setup tag and channel parameters, a list of valid poll options, and an empty list for votes:
+# Don't add a hash to 'tag':
+tag = 'donewedc'
 # description is displayed in braces:
-tagdescribe = 'Have you changed clocks to summer time yet?'
+tagdescribe = 'Have you written a 1-post story for #WedC yet?'
 retrievecount = 50
 channelid = '962'
 polloptions = {
-	'#no': 0,
 	'#yes': 0,
-	'#noneedto': 0,
-	'#2weeksago': 0,
-	'#notagain': 0
+	'#no': 0,
+	'#atAppDotNet': 0,
+	'#whatsthat': 0
 	}
 votes = []
 
@@ -69,7 +69,7 @@ while number >= 0:
 			if not ('<=>' in votepost):
 				for word in words:
 					if ('#' in word):
-						if word != ('#' + tag) or word != '#ThemeMonday':
+						if word != ('#' + tag) or word != '#WedC':
 							votesmade = True
 							hashtag = word
 							if (hashtag in polloptions):

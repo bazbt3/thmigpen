@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# thmigpoll v0.1.22 for Python 3.5
+# thmigpoll v0.1.23 for Python 3.5
 
 # A very beta attempt to list respondents to a pnut.io poll, using the poll's hashtag.
 # Based on rssupdatepnut and thmigpen.
@@ -8,6 +8,7 @@
 # Setup tag and channel parameters, a list of valid poll options, and an empty list for votes:
 # Don't add a hash to 'tag':
 tag = 'donewedc'
+tagabout = '#WedC'
 # description is displayed in braces:
 tagdescribe = 'Have you written a 1-post story for #WedC yet?'
 retrievecount = 50
@@ -69,7 +70,7 @@ while number >= 0:
 			if not ('<=>' in votepost):
 				for word in words:
 					if ('#' in word):
-						if word != ('#' + tag) or word != '#WedC':
+						if word != ('#' + tag) or word != tagabout:
 							votesmade = True
 							hashtag = word
 							if (hashtag in polloptions):

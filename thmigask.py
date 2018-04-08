@@ -6,9 +6,9 @@
 # Based on thmigpoll.
 
 # Setup tag and channel parameters, and an empty list for suggestions: 
-tag = 'tmask1804'
+tag = 'tmask1805'
 # description is displayed in braces:
-tagdescribe = 'Suggest a theme for April 9'
+tagdescribe = 'Suggest a theme for May 14'
 roomname = '#ThemeMonday'
 retrievecount = 50
 channelid = '779'
